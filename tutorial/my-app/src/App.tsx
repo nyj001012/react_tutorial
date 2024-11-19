@@ -10,6 +10,7 @@ interface BoardProps {
   xIsNext: boolean;
   squares: string[];
   onPlay: (squares: string[]) => void;
+  move: number;
 }
 
 function Square({value, onSquareClick}: SquareProps) {
@@ -32,7 +33,7 @@ function calculateWinner(squares: string[]): string | null {
   return null;
 }
 
-function Board({xIsNext, squares, onPlay}: BoardProps) {
+function Board({xIsNext, squares, onPlay, move}: BoardProps) {
   const winner = calculateWinner(squares);
   let status;
   if (winner) {
@@ -54,6 +55,7 @@ function Board({xIsNext, squares, onPlay}: BoardProps) {
   return (
     <>
       <div className="status">{ status }</div>
+      <div className="moveCounter">You're at #{ move === 0 ? 'start ' : move } move</div>
       <div className="board-row">
         <Square value={ squares[0] } onSquareClick={ () => handleClick(0) }/>
         <Square value={ squares[1] } onSquareClick={ () => handleClick(1) }/>
@@ -86,14 +88,14 @@ export default function Game() {
       description = 'Go to game start';
     }
     return (
-      <li key={move}>
+      <li key={ move }>
         <button onClick={ () => jumpTo(move) }>{ description }</button>
       </li>
     )
   });
 
   function handlePlay(nextSquares: string[]) {
-    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+    const nextHistory = [ ...history.slice(0, currentMove + 1), nextSquares ];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);
   }
@@ -105,7 +107,7 @@ export default function Game() {
   return (
     <div className="game">
       <div className="game-board">
-        <Board xIsNext={ xIsNext } squares={ currentSquares } onPlay={ handlePlay }/>
+        <Board xIsNext={ xIsNext } squares={ currentSquares } onPlay={ handlePlay } move={ currentMove }/>
       </div>
       <div className="game-info">
         <ol>{ moves }</ol>
