@@ -54,8 +54,8 @@ function Board({xIsNext, squares, onPlay, move}: BoardProps) {
   }
   const board = [];
   board.push(
-    <div className="status">{ status }</div>,
-    <div className="moveCounter">You're at #{ move === 0 ? 'start ' : move } move</div>
+    <div key="status" className="status">{ status }</div>,
+    <div key="moveCounter" className="moveCounter">You're at #{ move === 0 ? 'start ' : move } move</div>
   );
   for (let i = 0; i < 3; i++) {
     const row = [];
@@ -63,7 +63,7 @@ function Board({xIsNext, squares, onPlay, move}: BoardProps) {
       const index = i * 3 + j;
       row.push(<Square key={ index } value={ squares[index] } onSquareClick={ () => handleClick(index) }/>);
     }
-    board.push(<div key={ i } className="board-row">{ row }</div>);
+    board.push(<div key={`row-${i}`} className="board-row">{ row }</div>);
   }
   return (board)
 }
@@ -73,6 +73,7 @@ export default function Game() {
   const [ currentMove, setCurrentMove ] = useState(0);
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
+  const [orderByASC, setOrderByASC] = useState(true);
   const moves = history.map((_squares: string[], move: number) => {
     let description;
     if (move > 0) {
@@ -97,13 +98,18 @@ export default function Game() {
     setCurrentMove(nextMove);
   }
 
+  function sortMoves() {
+    setOrderByASC(!orderByASC);
+  }
+
   return (
     <div className="game">
       <div className="game-board">
         <Board xIsNext={ xIsNext } squares={ currentSquares } onPlay={ handlePlay } move={ currentMove }/>
       </div>
       <div className="game-info">
-        <ol>{ moves }</ol>
+        <button className="sort-moves" onClick={ sortMoves }>{orderByASC ? "오름차순" : "내림차순"}</button>
+        <ol>{ orderByASC ? moves : [...moves].reverse() }</ol>
       </div>
     </div>
   );
