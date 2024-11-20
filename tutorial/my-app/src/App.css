@@ -77,3 +77,7 @@
 .sort-history {
     width: fit-content;
 }
+
+.game-info > ol {
+    text-align: left;
+}
