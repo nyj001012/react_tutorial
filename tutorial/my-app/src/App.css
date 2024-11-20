@@ -57,6 +57,12 @@
     border: 1px solid #fff;
 }
 
+.square.winner {
+    border: 1px solid gold;
+    background-color: gold;
+    color: black;
+}
+
 .game {
     display: flex;
     align-items: center;
