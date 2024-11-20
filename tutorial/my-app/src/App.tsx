@@ -43,6 +43,7 @@ function Board({xIsNext, squares, onPlay, move}: BoardProps) {
     });
   } else {
     status = `Next player: ${ xIsNext ? 'X' : 'O' }`;
+    document.querySelectorAll('.winner').forEach((el) => el.classList.remove('winner'));
   }
   if (!winner && move === 9) {
     status = 'Draw!';
@@ -83,7 +84,11 @@ export default function Game() {
   const moves = history.map((_squares: string[], move: number) => {
     let description;
     if (move > 0) {
-      description = `Go to move #${ move }`;
+      // 현재 move 에서 바뀐 square 찾기
+      const index = history[move].findIndex((square: string[], index: number) => square !== history[move - 1][index]);
+      const col = index % 3 + 1;
+      const row = Math.floor(index / 3 + 1);
+      description = `Go to move #${ move } (col: ${ col }, row: ${ row })`;
     } else {
       description = 'Go to game start';
     }
