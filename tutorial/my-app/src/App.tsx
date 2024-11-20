@@ -41,6 +41,9 @@ function Board({xIsNext, squares, onPlay, move}: BoardProps) {
   } else {
     status = `Next player: ${ xIsNext ? 'X' : 'O' }`;
   }
+  if (move === 9) {
+    status = 'Draw!';
+  }
 
   const handleClick = (i: number) => {
     if (squares[i] || calculateWinner(squares)) return;
